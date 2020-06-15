@@ -3,8 +3,9 @@ package com.github.jmchilton.blend4j.toolshed;
 import com.github.jmchilton.blend4j.toolshed.beans.Repository;
 import com.github.jmchilton.blend4j.toolshed.beans.RepositoryDetails;
 import com.github.jmchilton.blend4j.toolshed.beans.RepositoryRevision;
-import com.sun.jersey.api.client.ClientResponse;
 import java.util.List;
+
+import org.glassfish.jersey.client.ClientResponse;
 
 public interface RepositoriesClient {
 

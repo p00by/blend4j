@@ -1,6 +1,6 @@
 package com.github.jmchilton.blend4j.galaxy.beans;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  *

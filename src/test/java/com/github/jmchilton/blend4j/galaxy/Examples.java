@@ -29,7 +29,7 @@ import com.github.jmchilton.blend4j.galaxy.beans.collection.response.CollectionE
 import com.github.jmchilton.blend4j.galaxy.beans.collection.response.CollectionResponse;
 import com.github.jmchilton.blend4j.galaxy.beans.collection.response.ElementResponse;
 import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
+import javax.ws.rs.client.WebTarget;
 
 import java.util.Map;
 
@@ -108,7 +108,7 @@ public class Examples {
     }
 
     // Use Jersey directly (with POJOs)
-    final WebResource webResource3 = galaxyInstance.getWebResource();
+    final WebTarget webResource3 = galaxyInstance.getWebResource();
     final Library testLibrary3 = new Library("test3");
     final ClientResponse response3 = webResource3
             .path("libraries")
@@ -118,7 +118,7 @@ public class Examples {
     final Library persistedLibrary3 = response3.getEntity(Library.class);
 
     // Use Jersey directly (no POJOs)
-    final WebResource webResource4 = galaxyInstance.getWebResource();
+    final WebTarget webResource4 = galaxyInstance.getWebResource();
     final ClientResponse response4 = webResource4
             .path("libraries")
             .type(MediaType.APPLICATION_JSON)

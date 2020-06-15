@@ -1,6 +1,6 @@
 package com.github.jmchilton.blend4j.galaxy;
 
-import com.sun.jersey.api.client.WebResource;
+import javax.ws.rs.client.WebTarget;
 
 class GalaxyInstanceImpl implements GalaxyInstance {
   private final WebResourceFactory webResourceFactory;
@@ -49,7 +49,7 @@ class GalaxyInstanceImpl implements GalaxyInstance {
     return new SearchClientImpl(this);
   }
 
-  public WebResource getWebResource() {
+  public WebTarget getWebResource() {
     return webResourceFactory.get();
   }
 

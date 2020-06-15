@@ -3,7 +3,7 @@ package com.github.jmchilton.blend4j.galaxy.beans.collection.request;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * A request to create a collection of elements (datasets or other collections) within Galaxy.

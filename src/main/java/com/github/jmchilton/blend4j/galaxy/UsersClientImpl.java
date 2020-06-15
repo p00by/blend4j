@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.codehaus.jackson.type.TypeReference;
+import org.glassfish.jersey.client.ClientResponse;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.jmchilton.blend4j.galaxy.beans.User;
 import com.github.jmchilton.blend4j.galaxy.beans.UserCreate;
-import com.sun.jersey.api.client.ClientResponse;
 
 class UsersClientImpl extends Client implements UsersClient {
   private static final TypeReference<List<User>> USER_LIST_TYPE_REFERENCE = new TypeReference<List<User>>() {
@@ -25,7 +25,7 @@ class UsersClientImpl extends Client implements UsersClient {
       return super.get(USER_LIST_TYPE_REFERENCE);
     } catch(RuntimeException e) {
       List out = new ArrayList();
-      out.add(super.getWebResource().get(User.class));
+      out.add(super.getWebResource().request().get(User.class));
       return out;
     }
   }
@@ -47,12 +47,12 @@ class UsersClientImpl extends Client implements UsersClient {
 
   @Override
   public User createUser(UserCreate userCreate) {
-    return createUserRequest(userCreate).getEntity(User.class);
+    return createUserRequest(userCreate).readEntity(User.class);
   }
 
   @Override
   public String createApiKey(String userId) {
-    return super.read(super.getWebResource().path(userId).path("api_key").post(ClientResponse.class), String.class);
+    return super.read(super.getWebResource().path(userId).path("api_key")?req(ClientResponse.class), String.class);
   }
 
   @Override

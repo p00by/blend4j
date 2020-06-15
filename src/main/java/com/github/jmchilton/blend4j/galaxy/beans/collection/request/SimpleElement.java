@@ -1,6 +1,6 @@
 package com.github.jmchilton.blend4j.galaxy.beans.collection.request;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Class describing requests for the creation of a simple element in a dataset (no sub elements).

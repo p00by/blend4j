@@ -1,7 +1,7 @@
 package com.github.jmchilton.blend4j.galaxy.beans;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jmchilton.blend4j.toolshed.beans.RepositoryRevision;
-import org.codehaus.jackson.annotate.JsonProperty;
 
 public class InstallableRepositoryRevision {
   @JsonProperty(value="changeset_revision")

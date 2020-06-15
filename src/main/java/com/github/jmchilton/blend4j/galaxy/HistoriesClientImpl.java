@@ -5,8 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-import org.codehaus.jackson.type.TypeReference;
-
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.jmchilton.blend4j.galaxy.beans.Dataset;
 import com.github.jmchilton.blend4j.galaxy.beans.HistoryDeleteResponse;
 import com.github.jmchilton.blend4j.galaxy.beans.History;
@@ -17,10 +16,11 @@ import com.github.jmchilton.blend4j.galaxy.beans.HistoryDataset;
 import com.github.jmchilton.blend4j.galaxy.beans.HistoryExport;
 import com.github.jmchilton.blend4j.galaxy.beans.collection.request.CollectionDescription;
 import com.github.jmchilton.blend4j.galaxy.beans.collection.response.CollectionResponse;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
 
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+
+import org.glassfish.jersey.client.ClientResponse;
 
 class HistoriesClientImpl extends Client implements HistoriesClient {
   HistoriesClientImpl(GalaxyInstanceImpl galaxyInstance) {
@@ -32,7 +32,7 @@ class HistoriesClientImpl extends Client implements HistoriesClient {
   }
 
   public History create(final History history) {
-    return createRequest(history).getEntity(History.class);
+    return createRequest(history).readEntity(History.class);
   }
 
   public List<History> getHistories() {
@@ -55,25 +55,25 @@ class HistoriesClientImpl extends Client implements HistoriesClient {
   }
 
   public Dataset showDataset(String historyId, String datasetId) {
-    return setGalaxyUrl(getWebResourceContents(historyId).path(datasetId).get(Dataset.class));
+    return setGalaxyUrl(getWebResourceContents(historyId).path(datasetId).request().get(Dataset.class));
   }
 
   public HistoryContentsProvenance showProvenance(String historyId, String datasetId) {
-    return getWebResourceContents(historyId).path(datasetId).path("provenance").get(HistoryContentsProvenance.class);
+    return getWebResourceContents(historyId).path(datasetId).path("provenance").request().get(HistoryContentsProvenance.class);
   }
 
 
   public HistoryDetails createHistoryDataset(String historyId, HistoryDataset hd) {
     final ClientResponse response = super.create(super.path(historyId).path("contents"), hd);
-    return response.getEntity(HistoryDetails.class);
+    return response.readEntity(HistoryDetails.class);
   }
 
   public HistoryExport exportHistory(String historyId) {
-    final WebResource.Builder resource = super.path(historyId).path("exports").type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
+    final WebTarget.Builder resource = super.path(historyId).path("exports").request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
     final ClientResponse response = resource.put(ClientResponse.class);
     final int status = response.getStatus();
     if(status == 200) {
-      return response.getEntity(HistoryExport.class);
+      return response.readEntity(HistoryExport.class);
     } else if(status == 202) {
       return new HistoryExport();
     } else {
@@ -85,7 +85,7 @@ class HistoriesClientImpl extends Client implements HistoriesClient {
   public CollectionResponse showDatasetCollection(String historyId,
       String datasetCollectionId) {
     return getWebResourceContents(historyId).path("dataset_collections").
-        path(datasetCollectionId).get(CollectionResponse.class);
+        path(datasetCollectionId).request().get(CollectionResponse.class);
   }
   
   @Override
@@ -101,10 +101,10 @@ class HistoriesClientImpl extends Client implements HistoriesClient {
     ClientResponse response = createDatasetCollectionRequest(historyId, collectionDescription);
     
     if (response.getStatus() == 200) {
-      return response.getEntity(CollectionResponse.class);
+      return response.readEntity(CollectionResponse.class);
     } else {
       throw new RuntimeException("Error creating dataset collection, status=" + response.getStatus() +
-          " returned=" + response.getEntity(String.class));
+          " returned=" + response.readEntity(String.class));
     }
   }
 
@@ -116,6 +116,7 @@ class HistoriesClientImpl extends Client implements HistoriesClient {
 	
     File downloadedFile = super.getWebResourceContents(historyId)
         .path(datasetId).path("display").queryParam("to_ext", fileExt)
+        .request()
         .get(File.class);
     downloadedFile.renameTo(destinationFile);
     FileWriter fr = new FileWriter(downloadedFile);
@@ -129,6 +130,6 @@ class HistoriesClientImpl extends Client implements HistoriesClient {
   
   @Override
   public HistoryDeleteResponse deleteHistory(String historyId) {
-    return deleteHistoryRequest(historyId).getEntity(HistoryDeleteResponse.class);
+    return deleteHistoryRequest(historyId).readEntity(HistoryDeleteResponse.class);
   }
 }

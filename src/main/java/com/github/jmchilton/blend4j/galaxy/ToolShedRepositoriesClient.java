@@ -5,8 +5,9 @@ import com.github.jmchilton.blend4j.galaxy.beans.InstalledRepository;
 import com.github.jmchilton.blend4j.galaxy.beans.RepositoryInstall;
 import com.github.jmchilton.blend4j.galaxy.beans.RepositoryWorkflow;
 import com.github.jmchilton.blend4j.galaxy.beans.Workflow;
-import com.sun.jersey.api.client.ClientResponse;
 import java.util.List;
+
+import org.glassfish.jersey.client.ClientResponse;
 
 public interface ToolShedRepositoriesClient {
 

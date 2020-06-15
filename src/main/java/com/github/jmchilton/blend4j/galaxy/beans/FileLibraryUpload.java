@@ -1,8 +1,8 @@
 package com.github.jmchilton.blend4j.galaxy.beans;
 
 import java.io.File;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonProperty;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class FileLibraryUpload extends LibraryUpload {
   private File file;

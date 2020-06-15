@@ -5,7 +5,7 @@ import com.github.jmchilton.blend4j.toolshed.beans.Repository;
 import com.github.jmchilton.blend4j.toolshed.beans.RepositoryDetails;
 import com.github.jmchilton.blend4j.toolshed.beans.RepositoryRevision;
 import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
+import javax.ws.rs.client.WebTarget;
 import java.util.List;
 import org.codehaus.jackson.type.TypeReference;
 
@@ -36,16 +36,16 @@ public class RepositoriesClientImpl extends Client implements RepositoriesClient
   }
 
   public ClientResponse getRepositoryRevisionInstallInfoRequest(RepositoryRevision revision) {
-    final WebResource baseResource = super.path("get_repository_revision_install_info");
-    final WebResource resource = withQueryParams(baseResource, revision);
+    final WebTarget baseResource = super.path("get_repository_revision_install_info");
+    final WebTarget resource = withQueryParams(baseResource, revision);
     return super.getResponse(resource);
   }
   
-  private WebResource withQueryParams(final WebResource resource, RepositoryRevision revision) {
+  private WebTarget withQueryParams(final WebTarget resource, RepositoryRevision revision) {
     return withQueryParams(resource, (Repository) revision).queryParam("changeset_revision", revision.getRevision());
   }
   
-  private WebResource withQueryParams(final WebResource resource, final Repository repository) {
+  private WebTarget withQueryParams(final WebTarget resource, final Repository repository) {
     return resource.queryParam("owner", repository.getOwner()).queryParam("name", repository.getName());
   }
 

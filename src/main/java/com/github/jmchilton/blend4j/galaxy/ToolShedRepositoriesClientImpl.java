@@ -1,15 +1,17 @@
 package com.github.jmchilton.blend4j.galaxy;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.jmchilton.blend4j.galaxy.beans.InstallableRepositoryRevision;
 import com.github.jmchilton.blend4j.galaxy.beans.InstalledRepository;
 import com.github.jmchilton.blend4j.galaxy.beans.RepositoryInstall;
 import com.github.jmchilton.blend4j.galaxy.beans.RepositoryWorkflow;
 import com.github.jmchilton.blend4j.galaxy.beans.Workflow;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
 import java.util.HashMap;
 import java.util.List;
-import org.codehaus.jackson.type.TypeReference;
+
+import javax.ws.rs.client.WebTarget;
+
+import org.glassfish.jersey.client.ClientResponse;
 
 class ToolShedRepositoriesClientImpl extends Client implements ToolShedRepositoriesClient {
   private static final TypeReference<List<InstalledRepository>> TOOL_SHED_REPOSITORY_LIST_TYPE_REFERENCE = new TypeReference<List<InstalledRepository>>() {
@@ -35,7 +37,7 @@ class ToolShedRepositoriesClientImpl extends Client implements ToolShedRepositor
   }
 
   public ClientResponse installRepositoryRequest(final RepositoryInstall install) {
-    final WebResource resource = super.webResource.path("new").path("install_repository_revision");
+    final WebTarget resource = super.webResource.path("new").path("install_repository_revision");
     return super.create(resource, install);
   }
   
@@ -45,13 +47,13 @@ class ToolShedRepositoriesClientImpl extends Client implements ToolShedRepositor
   }
   
   public ClientResponse repairRepositoryRequest(final InstallableRepositoryRevision repositoryIdentifier) {
-    final WebResource resource = super.webResource.path("repair_repository_revision");
+    final WebTarget resource = super.webResource.path("repair_repository_revision");
     return super.create(resource, repositoryIdentifier);
   }
 
   public ClientResponse exportedWorkflowsRequest(String toolShedId) {
-    final WebResource resource = super.webResource.path(toolShedId).path("exported_workflows");
-    return resource.get(ClientResponse.class);
+    final WebTarget resource = super.webResource.path(toolShedId).path("exported_workflows");
+    return resource.request().get(ClientResponse.class);
   }
 
   public List<RepositoryWorkflow> exportedWorkflows(String toolShedId) {
@@ -60,7 +62,7 @@ class ToolShedRepositoriesClientImpl extends Client implements ToolShedRepositor
   }
 
   public ClientResponse importWorkflowRequest(String toolShedId, int index) {
-    final WebResource resource = super.webResource.path(toolShedId).path("import_workflow");
+    final WebTarget resource = super.webResource.path(toolShedId).path("import_workflow");
     final HashMap<String, Object> postObject = new HashMap<String, Object>();
     postObject.put("index", index);
     return super.create(resource, postObject);
@@ -68,11 +70,11 @@ class ToolShedRepositoriesClientImpl extends Client implements ToolShedRepositor
 
   public Workflow importWorkflow(String toolShedId, int index) {
     final ClientResponse response = this.importWorkflowRequest(toolShedId, index);
-    return response.getEntity(Workflow.class);
+    return response.readEntity(Workflow.class);
   }
 
   public ClientResponse importWorkflowsRequest(String toolShedId) {
-    final WebResource resource = super.webResource.path(toolShedId).path("import_workflows");
+    final WebTarget resource = super.webResource.path(toolShedId).path("import_workflows");
     return super.create(resource);
   }
 

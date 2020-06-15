@@ -1,29 +1,32 @@
 package com.github.jmchilton.blend4j;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jmchilton.blend4j.exceptions.ResponseException;
 import com.github.jmchilton.blend4j.exceptions.SerializationException;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.multipart.BodyPart;
-import com.sun.jersey.multipart.FormDataBodyPart;
-import com.sun.jersey.multipart.FormDataMultiPart;
-import com.sun.jersey.multipart.file.FileDataBodyPart;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status.Family;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
+
+import org.glassfish.jersey.client.ClientResponse;
+import org.glassfish.jersey.media.multipart.BodyPart;
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 
 public class BaseClient {
   protected final ObjectMapper mapper = new ObjectMapper();
-  protected final WebResource webResource;
+  protected final WebTarget webResource;
 
-  public BaseClient(final WebResource baseWebResource,
+  public BaseClient(final WebTarget baseWebResource,
                     final String module) {
     this.webResource = baseWebResource.path(module);
   }
@@ -37,19 +40,20 @@ public class BaseClient {
     return response;
   }
 
-  protected ClientResponse create(final WebResource webResource, final Object object) {
+  protected ClientResponse create(final WebTarget webResource, final Object object) {
     return create(webResource, object, true);
   }
   
-  protected ClientResponse create(final WebResource webResource, final Object object, final boolean checkResponse) {
-    final ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, object);
+  protected ClientResponse create(final WebTarget webResource, final Object object, final boolean checkResponse) {
+    final ClientResponse response = webResource.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+            .post(Entity.entity(object, MediaType.APPLICATION_JSON), ClientResponse.class);
     if(checkResponse) {
       this.checkResponse(response);
     }
     return response;
   }
 
-  protected <T> List<T> get(final WebResource webResource, final TypeReference<List<T>> typeReference) {
+  protected <T> List<T> get(final WebTarget webResource, final TypeReference<List<T>> typeReference) {
     final String json = getJson(webResource);
     return readJson(json, typeReference);
   }
@@ -60,35 +64,35 @@ public class BaseClient {
   
   /**
    * Gets the response for a DELETE request.
-   * @param webResource The {@link WebResource} to send the request to.
+   * @param webResource The {@link WebTarget} to send the request to.
    * @return The {@link ClientResponse} for this request.
    * @throws ResponseException If the response was not successful.
    */
-  protected ClientResponse deleteResponse(final WebResource webResource) {
+  protected ClientResponse deleteResponse(final WebTarget webResource) {
     return deleteResponse(webResource, true);
   }
 
   /**
    * Gets the response for a DELETE request.
-   * @param webResource The {@link WebResource} to send the request to.
+   * @param webResource The {@link WebTarget} to send the request to.
    * @param requestEntity The request entity.
    * @return The {@link ClientResponse} for this request.
    * @throws ResponseException If the response was not successful.
    */
-  protected ClientResponse deleteResponse(final WebResource webResource, java.lang.Object requestEntity) {
+  protected ClientResponse deleteResponse(final WebTarget webResource, java.lang.Object requestEntity) {
     return deleteResponse(webResource, requestEntity, true);
   }
 
   /**
    * Gets the response for a DELETE request.
-   * @param webResource The {@link WebResource} to send the request to.
+   * @param webResource The {@link WebTarget} to send the request to.
    * @param requestEntity The request entity.
    * @param checkResponse True if an exception should be thrown on failure, false otherwise.
    * @return The {@link ClientResponse} for this request.
    * @throws ResponseException If the response was not successful.
    */
-  protected ClientResponse deleteResponse(final WebResource webResource, java.lang.Object requestEntity, final boolean checkResponse) {
-    final ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).delete(ClientResponse.class, requestEntity);
+  protected ClientResponse deleteResponse(final WebTarget webResource, java.lang.Object requestEntity, final boolean checkResponse) {
+    final ClientResponse response = webResource.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).delete(ClientResponse.class, requestEntity);
     if(checkResponse) {
       this.checkResponse(response);
     }
@@ -97,38 +101,38 @@ public class BaseClient {
 
   /**
    * Gets the response for a DELETE request.
-   * @param webResource The {@link WebResource} to send the request to.
+   * @param webResource The {@link WebTarget} to send the request to.
    * @param checkResponse True if an exception should be thrown on failure, false otherwise.
    * @return The {@link ClientResponse} for this request.
    * @throws ResponseException If the response was not successful.
    */
-  protected ClientResponse deleteResponse(final WebResource webResource, final boolean checkResponse) {
-    final ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).delete(ClientResponse.class);
+  protected ClientResponse deleteResponse(final WebTarget webResource, final boolean checkResponse) {
+    final ClientResponse response = webResource.request(MediaType.APPLICATION_JSON).delete(ClientResponse.class);
     if(checkResponse) {
       this.checkResponse(response);
     }
     return response;
   }
   
-  protected ClientResponse getResponse(final WebResource webResource) {
+  protected ClientResponse getResponse(final WebTarget webResource) {
     return getResponse(webResource, true);
   }
   
-  protected ClientResponse getResponse(final WebResource webResource, final boolean checkResponse) {
-    final ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+  protected ClientResponse getResponse(final WebTarget webResource, final boolean checkResponse) {
+    final ClientResponse response = webResource.request(MediaType.APPLICATION_JSON).get(ClientResponse.class);
     if(checkResponse) {
       this.checkResponse(response);
     }
     return response;
   }
   
-  protected String getJson(final WebResource webResource) {
+  protected String getJson(final WebTarget webResource) {
     return getJson(webResource, true);
   }
 
-  protected String getJson(final WebResource webResource, final boolean checkResponse) {
+  protected String getJson(final WebTarget webResource, final boolean checkResponse) {
     final ClientResponse response = getResponse(webResource, checkResponse);
-    final String json = response.getEntity(String.class);
+    final String json = response.readEntity(String.class);
     return json;
   }
 
@@ -145,19 +149,19 @@ public class BaseClient {
     return exception;
   }
   
-  protected WebResource getWebResource() {
+  protected WebTarget getWebResource() {
     return webResource;
   }
 
-  protected WebResource getWebResource(final String id) {
+  protected WebTarget getWebResource(final String id) {
     return path(id);
   }
 
-  protected WebResource getWebResourceContents(final String id) {
+  protected WebTarget getWebResourceContents(final String id) {
     return getWebResource(id).path("contents");
   }
   
-  protected WebResource path(final String path) {
+  protected WebTarget path(final String path) {
     return getWebResource().path(path);
   }
 
@@ -166,8 +170,8 @@ public class BaseClient {
     };
   }
 
-  protected ClientResponse multipartPost(final WebResource resource, final Map<String, Object> fields, final Iterable<BodyPart> bodyParts) {
-    final WebResource.Builder builder = resource.type(MediaType.MULTIPART_FORM_DATA_TYPE);
+  protected ClientResponse multipartPost(final WebTarget resource, final Map<String, Object> fields, final Iterable<BodyPart> bodyParts) {
+    final WebTarget.Builder builder = resource.type(MediaType.MULTIPART_FORM_DATA_TYPE);
     final FormDataMultiPart multiPart = new FormDataMultiPart();
     for(final Map.Entry<String, Object> fieldEntry : fields.entrySet()) {
       final FormDataBodyPart bp = new FormDataBodyPart(fieldEntry.getKey(), fieldEntry.getValue(), MediaType.APPLICATION_JSON_TYPE);
@@ -211,12 +215,12 @@ public class BaseClient {
   }
 
   protected <T> T read(final ClientResponse response, final TypeReference<T> typeReference) {
-    final String json = response.getEntity(String.class);
+    final String json = response.readEntity(String.class);
     return readJson(json, typeReference);
   }
 
   protected <T> T read(final ClientResponse response, final Class<T> clazz) {
-    final String json = response.getEntity(String.class);
+    final String json = response.readEntity(String.class);
     return readJson(json, clazz);
   }
 

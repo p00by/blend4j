@@ -1,10 +1,9 @@
 package com.github.jmchilton.blend4j.galaxy;
 
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
-import com.sun.jersey.api.client.filter.LoggingFilter;
-import com.sun.jersey.api.json.JSONConfiguration;
+import javax.ws.rs.client.WebTarget;
+
+import org.glassfish.jersey.client.ClientConfig;
+
 
 /**
  * Default and simplest possible implementation of WebResourceFactory.
@@ -33,9 +32,9 @@ public class DefaultWebResourceFactoryImpl implements WebResourceFactory {
    * @return A Jersey WebResource setup to target http://<galaxy_url>/api and with the key query parameter set to
    * desired Galaxy key.
    */
-  public WebResource get() {
+  public WebTarget get() {
     final String apiKey = getApiKey();
-    WebResource resource = getRawWebResource();
+    WebTarget resource = getRawWebResource();
     if(apiKey != null) {
       resource = resource.queryParam("key", apiKey);
     }
@@ -64,7 +63,7 @@ public class DefaultWebResourceFactoryImpl implements WebResourceFactory {
    * @return Jersey client.
    *
    */
-  protected com.sun.jersey.api.client.Client getJerseyClient() {
+  protected javax.ws.rs.client.Client getJerseyClient() {
     final ClientConfig clientConfig = new DefaultClientConfig();
     clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
     com.sun.jersey.api.client.Client client = com.sun.jersey.api.client.Client.create(clientConfig);
@@ -75,13 +74,13 @@ public class DefaultWebResourceFactoryImpl implements WebResourceFactory {
   }
   
   /**
-   * Build Jersey client, and get {@link WebResource} targeting Galaxy API.
+   * Build Jersey client, and get {@link WebTarget} targeting Galaxy API.
    * Use public method get() to get higher level WebResource with key populated
    * for instance.
    * 
    * @return Web resource corresponding to target Galaxy API.
    */
-  protected WebResource getRawWebResource() {
+  protected WebTarget getRawWebResource() {
     final com.sun.jersey.api.client.Client client = getJerseyClient();
     return client.resource(getUrl()).path(API_PATH);
   }

@@ -1,8 +1,10 @@
 package com.github.jmchilton.blend4j.galaxy;
 
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
 import java.util.Map;
+
+import javax.ws.rs.client.WebTarget;
+
+import org.glassfish.jersey.client.ClientResponse;
 
 /**
  * Build a WebResourceFactory from Galaxy credentials (username/password).
@@ -33,15 +35,16 @@ public class GalaxyAuthWebResourceFactoryImpl extends DefaultWebResourceFactoryI
     if(key == null) {
       final String unencodedCredentials = email + ":" + password;
       final String encodedCredentials = javax.xml.bind.DatatypeConverter.printBase64Binary(unencodedCredentials.getBytes());
-      final WebResource resource = super.getRawWebResource();
+      final WebTarget resource = super.getRawWebResource();
       final ClientResponse response = resource.path("authenticate")
                                               .path("baseauth")
+                                              .request()
                                               .header("Authorization", encodedCredentials)
                                               .get(ClientResponse.class);
       if(response.getStatus() != 200) {
         throw new RuntimeException("Failed to build Galaxy API key for supplied user e-mail and password.");
       }
-      final Map<String, Object> responseObjects = response.getEntity(Map.class);
+      final Map<String, Object> responseObjects = response.readEntity(Map.class);
       key = responseObjects.get("api_key").toString();
     }
     return key;

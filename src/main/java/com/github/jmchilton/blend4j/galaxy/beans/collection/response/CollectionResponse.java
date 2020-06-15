@@ -1,10 +1,10 @@
 package com.github.jmchilton.blend4j.galaxy.beans.collection.response;
 
 import java.util.List;
-import com.github.jmchilton.blend4j.util.Objects;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.jmchilton.blend4j.util.Objects;
 
 import com.github.jmchilton.blend4j.galaxy.beans.HistoryContents;
 

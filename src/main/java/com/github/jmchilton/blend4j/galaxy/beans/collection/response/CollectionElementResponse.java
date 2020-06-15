@@ -1,10 +1,9 @@
 package com.github.jmchilton.blend4j.galaxy.beans.collection.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.github.jmchilton.blend4j.util.Objects;
-
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.annotate.JsonSubTypes;
-import org.codehaus.jackson.annotate.JsonTypeInfo;
 
 import com.github.jmchilton.blend4j.galaxy.beans.Dataset;
 

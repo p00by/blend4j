@@ -2,6 +2,8 @@ package com.github.jmchilton.blend4j.galaxy;
 
 import java.util.List;
 
+import org.glassfish.jersey.client.ClientResponse;
+
 import com.github.jmchilton.blend4j.galaxy.beans.DirectoryLibraryUpload;
 import com.github.jmchilton.blend4j.galaxy.beans.FileLibraryUpload;
 import com.github.jmchilton.blend4j.galaxy.beans.FilesystemPathsLibraryUpload;
@@ -12,7 +14,6 @@ import com.github.jmchilton.blend4j.galaxy.beans.LibraryDataset;
 import com.github.jmchilton.blend4j.galaxy.beans.LibraryFolder;
 import com.github.jmchilton.blend4j.galaxy.beans.LibraryPermissions;
 import com.github.jmchilton.blend4j.galaxy.beans.UrlLibraryUpload;
-import com.sun.jersey.api.client.ClientResponse;
 
 public interface LibrariesClient {
   ClientResponse createLibraryRequest(Library library);

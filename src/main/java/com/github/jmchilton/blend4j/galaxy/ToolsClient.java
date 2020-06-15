@@ -7,12 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.glassfish.jersey.client.ClientResponse;
+
 import com.github.jmchilton.blend4j.galaxy.beans.History;
 import com.github.jmchilton.blend4j.galaxy.beans.Tool;
 import com.github.jmchilton.blend4j.galaxy.beans.ToolExecution;
 import com.github.jmchilton.blend4j.galaxy.beans.ToolInputs;
 import com.github.jmchilton.blend4j.galaxy.beans.ToolSection;
-import com.sun.jersey.api.client.ClientResponse;
 
 public interface ToolsClient {
   ToolExecution create(History history, ToolInputs inputs);

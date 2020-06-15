@@ -1,9 +1,10 @@
 package com.github.jmchilton.blend4j.galaxy;
 
+import org.glassfish.jersey.client.ClientResponse;
+
 import com.github.jmchilton.blend4j.BaseClient;
 import com.github.jmchilton.blend4j.exceptions.ResponseException;
 import com.github.jmchilton.blend4j.galaxy.beans.HasGalaxyUrl;
-import com.sun.jersey.api.client.ClientResponse;
 
 class Client extends BaseClient {
   private final GalaxyInstanceImpl galaxyInstance;

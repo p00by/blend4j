@@ -1,7 +1,8 @@
 package com.github.jmchilton.blend4j.exceptions;
 
+import org.glassfish.jersey.client.ClientResponse;
+
 import com.github.jmchilton.blend4j.util.MoreObjects;
-import com.sun.jersey.api.client.ClientResponse;
 
 public class ResponseException extends ApiException {
   private final Integer statusCode;
@@ -10,7 +11,7 @@ public class ResponseException extends ApiException {
   public ResponseException(final ClientResponse clientResponse) {
     super();
     this.statusCode = clientResponse.getStatus();
-    this.rawResponse = clientResponse.getEntity(String.class);
+    this.rawResponse = clientResponse.readEntity(String.class);
   }
 
   protected MoreObjects.ToStringHelper toStringHelper() {

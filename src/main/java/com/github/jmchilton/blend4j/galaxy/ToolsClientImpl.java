@@ -5,14 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.codehaus.jackson.type.TypeReference;
+import org.glassfish.jersey.client.ClientResponse;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.jmchilton.blend4j.galaxy.beans.History;
 import com.github.jmchilton.blend4j.galaxy.beans.Tool;
 import com.github.jmchilton.blend4j.galaxy.beans.ToolExecution;
 import com.github.jmchilton.blend4j.galaxy.beans.ToolInputs;
 import com.github.jmchilton.blend4j.galaxy.beans.ToolSection;
-import com.sun.jersey.api.client.ClientResponse;
 
 class ToolsClientImpl extends Client implements ToolsClient {
   ToolsClientImpl(GalaxyInstanceImpl galaxyInstance) {
@@ -21,7 +21,7 @@ class ToolsClientImpl extends Client implements ToolsClient {
 
   public ToolExecution create(History history, ToolInputs inputs) {
     inputs.setHistoryId(history.getId());
-    return super.create(inputs).getEntity(ToolExecution.class);
+    return super.create(inputs).readEntity(ToolExecution.class);
     // XXX Datasets not yet properly returned from Tool creation
     // return new ArrayList();
   }
@@ -37,7 +37,7 @@ class ToolsClientImpl extends Client implements ToolsClient {
   }
 
   public ToolExecution upload(final FileUploadRequest request) {
-    return uploadRequest(request).getEntity(ToolExecution.class);
+    return uploadRequest(request).readEntity(ToolExecution.class);
   }
   
   public ClientResponse uploadRequest(final FileUploadRequest request) {
@@ -63,7 +63,7 @@ class ToolsClientImpl extends Client implements ToolsClient {
    * {@inheritDoc}
    */
   public Tool showTool(final String toolId) {
-    return super.getWebResource(toolId).get(Tool.class);
+    return super.getWebResource(toolId).request().get(Tool.class);
   }
 
   

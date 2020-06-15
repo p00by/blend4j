@@ -1,7 +1,6 @@
 package com.github.jmchilton.blend4j.galaxy.beans.collection.request;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jmchilton.blend4j.galaxy.beans.collection.CollectionSource;
 
 /**

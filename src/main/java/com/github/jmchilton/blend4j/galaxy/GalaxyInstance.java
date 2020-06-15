@@ -1,6 +1,6 @@
 package com.github.jmchilton.blend4j.galaxy;
 
-import com.sun.jersey.api.client.WebResource;
+import javax.ws.rs.client.WebTarget;
 
 public interface GalaxyInstance {
   HistoriesClient getHistoriesClient();
@@ -23,7 +23,7 @@ public interface GalaxyInstance {
     
   SearchClient getSearchClient();
   
-  WebResource getWebResource();
+  WebTarget getWebResource();
 
   String getGalaxyUrl();
   

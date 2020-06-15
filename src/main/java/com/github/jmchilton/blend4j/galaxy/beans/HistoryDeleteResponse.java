@@ -1,7 +1,7 @@
 package com.github.jmchilton.blend4j.galaxy.beans;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Defines the response from a delete request to Galaxy.

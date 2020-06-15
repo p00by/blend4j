@@ -1,6 +1,6 @@
 package com.github.jmchilton.blend4j.galaxy.beans.collection;
 
-import org.codehaus.jackson.annotate.JsonValue;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * Describes the source of data for a dataset collection.

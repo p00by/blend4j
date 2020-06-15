@@ -2,16 +2,16 @@ package com.github.jmchilton.blend4j.galaxy;
 
 import java.util.List;
 
-import org.codehaus.jackson.type.TypeReference;
-
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.jmchilton.blend4j.galaxy.beans.Workflow;
 import com.github.jmchilton.blend4j.galaxy.beans.WorkflowDetails;
 import com.github.jmchilton.blend4j.galaxy.beans.WorkflowInputs;
 import com.github.jmchilton.blend4j.galaxy.beans.WorkflowOutputs;
 import com.github.jmchilton.blend4j.galaxy.beans.WorkflowInvocationInputs;
 import com.github.jmchilton.blend4j.galaxy.beans.WorkflowInvocationOutputs;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
+import javax.ws.rs.client.WebTarget;
+
+import org.glassfish.jersey.client.ClientResponse;
 
 class WorkflowsClientImpl extends Client implements WorkflowsClient {
   public WorkflowsClientImpl(GalaxyInstanceImpl galaxyInstance) {
@@ -32,8 +32,8 @@ class WorkflowsClientImpl extends Client implements WorkflowsClient {
   }
 
   public String exportWorkflow(final String id) {
-    WebResource webResource = getWebResource().path("download").path(id);
-    return webResource.get(String.class);
+    WebTarget webResource = getWebResource().path("download").path(id);
+    return webResource.request().get(String.class);
   }
 
   @Deprecated
@@ -43,7 +43,7 @@ class WorkflowsClientImpl extends Client implements WorkflowsClient {
 
   @Deprecated
   public WorkflowOutputs runWorkflow(final WorkflowInputs workflowInputs) {
-    return runWorkflowResponse(workflowInputs).getEntity(WorkflowOutputs.class);
+    return runWorkflowResponse(workflowInputs).readEntity(WorkflowOutputs.class);
   }
 
   public ClientResponse runWorkflowInvocationResponse(WorkflowInvocationInputs workflowInvocationInputs) {
@@ -51,7 +51,7 @@ class WorkflowsClientImpl extends Client implements WorkflowsClient {
   }
 
   public WorkflowInvocationOutputs invokeWorkflow(final WorkflowInvocationInputs workflowInvocationInputs) {
-    return runWorkflowInvocationResponse(workflowInvocationInputs).getEntity(WorkflowInvocationOutputs.class);
+    return runWorkflowInvocationResponse(workflowInvocationInputs).readEntity(WorkflowInvocationOutputs.class);
   }
 
   public ClientResponse importWorkflowResponse(final String json, final boolean publish) {
@@ -60,11 +60,11 @@ class WorkflowsClientImpl extends Client implements WorkflowsClient {
   }
 
   public Workflow importWorkflow(String json) {
-    return importWorkflowResponse(json, false).getEntity(Workflow.class);
+    return importWorkflowResponse(json, false).readEntity(Workflow.class);
   }
 
   public Workflow importWorkflow(String json, boolean publish) {
-    return importWorkflowResponse(json, publish).getEntity(Workflow.class);
+    return importWorkflowResponse(json, publish).readEntity(Workflow.class);
   }
 
   @Override

@@ -2,9 +2,10 @@ package com.github.jmchilton.blend4j.galaxy;
 
 import java.util.List;
 
+import org.glassfish.jersey.client.ClientResponse;
+
 import com.github.jmchilton.blend4j.galaxy.beans.User;
 import com.github.jmchilton.blend4j.galaxy.beans.UserCreate;
-import com.sun.jersey.api.client.ClientResponse;
 
 public interface UsersClient {
   List<User> getUsers();

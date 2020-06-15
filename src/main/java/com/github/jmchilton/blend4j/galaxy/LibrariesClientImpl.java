@@ -2,8 +2,7 @@ package com.github.jmchilton.blend4j.galaxy;
 
 import java.util.List;
 
-import org.codehaus.jackson.type.TypeReference;
-
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.jmchilton.blend4j.galaxy.beans.DirectoryLibraryUpload;
 import com.github.jmchilton.blend4j.galaxy.beans.FileLibraryUpload;
 import com.github.jmchilton.blend4j.galaxy.beans.FilesystemPathsLibraryUpload;
@@ -14,10 +13,11 @@ import com.github.jmchilton.blend4j.galaxy.beans.LibraryDataset;
 import com.github.jmchilton.blend4j.galaxy.beans.LibraryFolder;
 import com.github.jmchilton.blend4j.galaxy.beans.LibraryPermissions;
 import com.github.jmchilton.blend4j.galaxy.beans.UrlLibraryUpload;
-import com.sun.jersey.api.client.ClientResponse;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import org.glassfish.jersey.client.ClientResponse;
 
 class LibrariesClientImpl extends Client implements LibrariesClient {
   LibrariesClientImpl(GalaxyInstanceImpl galaxyInstance) {
@@ -30,7 +30,7 @@ class LibrariesClientImpl extends Client implements LibrariesClient {
 
   public Library createLibrary(final Library library) {
     // should not be this complicated, I suspect library API is returning wrong thing. See galaxy issue #802
-    return createLibraryRequest(library).getEntity(Library.class);
+    return createLibraryRequest(library).readEntity(Library.class);
     //return readJson(createLibraryRequest(library).getEntity(String.class), new TypeReference<List<Library>>() {}).get(0);
   }
   
@@ -44,7 +44,7 @@ class LibrariesClientImpl extends Client implements LibrariesClient {
   
   
   public LibraryFolder createFolder(final String libraryId, final LibraryFolder folder) {  
-    return readJson(createFolderRequest(libraryId, folder).getEntity(String.class), new TypeReference<List<LibraryFolder>>() {}).get(0);
+    return readJson(createFolderRequest(libraryId, folder).readEntity(String.class), new TypeReference<List<LibraryFolder>>() {}).get(0);
   }
 
   public List<Library> getLibraries() {
@@ -65,7 +65,7 @@ class LibrariesClientImpl extends Client implements LibrariesClient {
   }
   
   public GalaxyObject uploadFilesystemPaths(final String libraryId, final FilesystemPathsLibraryUpload upload) {
-    return readJson(uploadFilesystemPathsRequest(libraryId, upload).getEntity(String.class), new TypeReference<List<GalaxyObject>>() {}).get(0);
+    return readJson(uploadFilesystemPathsRequest(libraryId, upload).readEntity(String.class), new TypeReference<List<GalaxyObject>>() {}).get(0);
   }
 
   public LibraryContent getRootFolder(final String libraryId) {

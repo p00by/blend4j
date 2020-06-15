@@ -2,9 +2,8 @@ package com.github.jmchilton.blend4j.galaxy.beans;
 
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonProperty;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jmchilton.blend4j.galaxy.ToolsClient;
 
 /**
